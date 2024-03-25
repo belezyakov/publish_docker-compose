@@ -1,7 +1,7 @@
 # action.yml
-name: "Docker-Compose Publish"
-author: "Darryl Mendillo"
-description: "Publish all docker containers in docker-compose file"
+name: "Docker-Compose Images GHCR Publish"
+author: "Ilya Belezyakov"
+description: "Publish docker images built from docker-compose file to github packages"
 branding:
   icon: "database"
   color: "red"

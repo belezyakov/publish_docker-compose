@@ -1,6 +1,6 @@
 # Docker-Compose Publish
 
-A GitHub Action that builds and publishes containers from docker-compose file to the current github repository
+A GitHub Action that builds and publishes containers from docker-compose file
 
 ## Features
 
@@ -10,7 +10,6 @@ Automatically publishes images to github repo
 
 Each dockerfile target must have a `LABEL name="<name>`. This is used to name the published file
 
-If version is blank (recommended), the release tag version is used.
 
 ## Example Usage
 ```
@@ -21,23 +20,6 @@ If version is blank (recommended), the release tag version is used.
         docker_compose: 'docker-compose.build.yml' # required
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
 ```
-
-## Input
-
-Below is a breakdown of the expected action inputs.
-
-### `version`
-
-Tag to be published
-
-
-### `docker_compose`
-
-docker-compose file to use
-
-### `repo_token`
-
-repository token: ${{ secrets.GITHUB_TOKEN }}
 
 ## Docker-compose file
 ```

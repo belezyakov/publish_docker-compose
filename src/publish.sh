@@ -21,7 +21,7 @@ while read -r IMAGE_ID; do
 
     echo "IMAGE_ID: $IMAGE_ID"
     # get the name label
-    NAME=$(basename ${GITHUB_REPOSITORY}).$(docker inspect --format '{{ index .Config.Labels.name }}' $IMAGE_ID)
+    NAME=$(docker inspect --format '{{join (slice (split (index (split (index .RepoTags 0) ":") 0) "_") 1) "_"}}' $IMAGE_ID)
     TAG="ghcr.io/${GITHUB_REPOSITORY}/$NAME:$VERSION"
 
     # tag and push

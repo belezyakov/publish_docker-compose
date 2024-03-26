@@ -23,9 +23,12 @@ while read -r IMAGE_ID; do
     # get the name label
     NAME=$(docker inspect --format '{{join (slice (split (index (split (index .RepoTags 0) ":") 0) "_") 1) "_"}}' $IMAGE_ID)
     TAG="ghcr.io/${GITHUB_REPOSITORY}/$NAME:$VERSION"
+    LATEST="ghcr.io/${GITHUB_REPOSITORY}/$NAME:latest"
 
     # tag and push
     docker tag $IMAGE_ID $TAG
+    docker tag $IMAGE_ID $LATEST
     docker push $TAG
+    docker push $LATEST
 
 done <<< "$IMAGE_IDs"

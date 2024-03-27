@@ -6,6 +6,10 @@ GITHUB_REPOSITORY=$(echo "$GITHUB_REPOSITORY" | awk '{print tolower($0)}')
 echo "VERSION=$VERSION"
 echo "DOCKER_COMPOSE=$DOCKER_COMPOSE"
 
+# get repo name
+REPO_NAME=$GITHUB_REPOSITORY
+REPO_NAME=${REPO_NAME//"$GITHUB_REPOSITORY_OWNER/"/}
+
 # login to github
 docker login ghcr.io -u ${GITHUB_REF} -p ${REPO_TOKEN}
 
@@ -21,7 +25,11 @@ while read -r IMAGE_ID; do
 
     echo "IMAGE_ID: $IMAGE_ID"
     # get the name label
-    NAME=$(docker inspect --format '{{join (slice (split (index (split (index .RepoTags 0) ":") 0) "_") 1) "_"}}' $IMAGE_ID)
+    IMAGE_NAME=$(docker inspect --format '{{(index (split (index .RepoTags 0) ":") 0)}}' $IMAGE_ID)
+    # cutoff repository name
+    NAME=${IMAGE_NAME//"${REPO_NAME}_"/}
+    echo "NEW_NAME: $NAME"
+    echo ${GITHUB_REPOSITORY}
     GH_SHA="ghcr.io/${GITHUB_REPOSITORY}/$NAME:${GITHUB_SHA}"
     LATEST="ghcr.io/${GITHUB_REPOSITORY}/$NAME:latest"
 

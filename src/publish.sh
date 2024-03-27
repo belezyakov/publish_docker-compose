@@ -22,13 +22,19 @@ while read -r IMAGE_ID; do
     echo "IMAGE_ID: $IMAGE_ID"
     # get the name label
     NAME=$(docker inspect --format '{{join (slice (split (index (split (index .RepoTags 0) ":") 0) "_") 1) "_"}}' $IMAGE_ID)
-    TAG="ghcr.io/${GITHUB_REPOSITORY}/$NAME:$VERSION"
+    GH_SHA="ghcr.io/${GITHUB_REPOSITORY}/$NAME:${GITHUB_SHA}"
     LATEST="ghcr.io/${GITHUB_REPOSITORY}/$NAME:latest"
 
     # tag and push
-    docker tag $IMAGE_ID $TAG
+    docker tag $IMAGE_ID $GH_SHA
     docker tag $IMAGE_ID $LATEST
-    docker push $TAG
+    docker push $GH_SHA
     docker push $LATEST
+
+    if [[ "$VERSION" != "${GITHUB_SHA}" ]]; then
+        VERTAG="ghcr.io/${GITHUB_REPOSITORY}/$NAME:$VERSION"
+        docker tag $IMAGE_ID $VERTAG
+        docker push $VERTAG
+    fi
 
 done <<< "$IMAGE_IDs"

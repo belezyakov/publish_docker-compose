@@ -10,6 +10,13 @@ echo "DOCKER_COMPOSE=$DOCKER_COMPOSE"
 REPO_NAME=$GITHUB_REPOSITORY
 REPO_NAME=${REPO_NAME//"$GITHUB_REPOSITORY_OWNER/"/}
 
+# put gh repo label to dockerfiles
+dockerfiles=$(find . -name Dockerfile*)
+for dockerfile in $dockerfiles
+do
+        sed -i '2i\\nLABEL org.opencontainers.image.source=https://github.com/'$GITHUB_REPOSITORY'\n' $dockerfile
+done
+
 # login to github
 docker login ghcr.io -u ${GITHUB_REF} -p ${REPO_TOKEN}
 

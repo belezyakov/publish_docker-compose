@@ -1,6 +1,7 @@
 VERSION="$1"
 DOCKER_COMPOSE="$2"
 REPO_TOKEN="$3"
+REPO_CONNECT="$4"
 GITHUB_REPOSITORY=$(echo "$GITHUB_REPOSITORY" | awk '{print tolower($0)}')
 
 echo "VERSION=$VERSION"
@@ -10,12 +11,14 @@ echo "DOCKER_COMPOSE=$DOCKER_COMPOSE"
 REPO_NAME=$GITHUB_REPOSITORY
 REPO_NAME=${REPO_NAME//"$GITHUB_REPOSITORY_OWNER/"/}
 
-# put gh repo label to dockerfiles
-dockerfiles=$(find . -name Dockerfile*)
-for dockerfile in $dockerfiles
-do
-        sed -i '2i\\nLABEL org.opencontainers.image.source=https://github.com/'$GITHUB_REPOSITORY'\n' $dockerfile
-done
+if [[ "$REPO_CONNECT" == 'true' ]]; then
+    # put gh repo label to dockerfiles
+    dockerfiles=$(find . -name Dockerfile*)
+    for dockerfile in $dockerfiles
+    do
+            sed -i '2i\\nLABEL org.opencontainers.image.source=https://github.com/'$GITHUB_REPOSITORY'\n' $dockerfile
+    done
+fi
 
 # login to github
 docker login ghcr.io -u ${GITHUB_REF} -p ${REPO_TOKEN}

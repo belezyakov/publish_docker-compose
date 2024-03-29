@@ -17,6 +17,14 @@ inputs:
     description: "Github Repo token"
     required: false
     default: ''
+  repo_connect:
+    description: "Connect package to current repository"
+    type: choice
+    required: false
+    default: 'true'
+    options:
+      - true
+      - false
 outputs:
   tag:
     description: "Tag that was published"
@@ -36,5 +44,5 @@ runs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
       shell: bash
     - id: publish
-      run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }} ${{ inputs.repo_token }}
+      run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }} ${{ inputs.repo_token }} ${{ inputs.repo_connect }}
       shell: bash

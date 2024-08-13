@@ -37,7 +37,7 @@ while read -r IMAGE_ID; do
     # get the name label
     IMAGE_NAME=$(docker inspect --format '{{(index (split (index .RepoTags 0) ":") 0)}}' $IMAGE_ID)
     # cutoff repository name
-    NAME=${IMAGE_NAME//"${REPO_NAME}_"/}
+    NAME=${IMAGE_NAME//"${REPO_NAME}-"/}
     echo "NEW_NAME: $NAME"
     echo ${GITHUB_REPOSITORY}
     GH_SHA="ghcr.io/${GITHUB_REPOSITORY}/$NAME:${GITHUB_SHA}"

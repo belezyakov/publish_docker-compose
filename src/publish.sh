@@ -24,10 +24,10 @@ fi
 docker login ghcr.io -u ${GITHUB_REF} -p ${REPO_TOKEN}
 
 # build and run the docker images
-docker-compose -f $DOCKER_COMPOSE up --no-start
+docker compose -f $DOCKER_COMPOSE up --no-start
 
 # get all built IDs
-IMAGE_IDs=$(docker-compose -f $DOCKER_COMPOSE images -q)
+IMAGE_IDs=$(docker compose -f $DOCKER_COMPOSE images -q)
 
 echo "IMAGE_IDs: $IMAGE_IDs"
 
